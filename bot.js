@@ -1,4 +1,5 @@
 import { Telegraf } from 'telegraf';
+import { Markup } from 'telegraf';
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
 
@@ -14,7 +15,54 @@ const getTradingData = async (func, symbol) => {
   return data;
 };
 
-bot.start((ctx) => ctx.reply('Welcome to the Trading Updates Bot! Use /trade <symbol> to get real-time updates.'));
+bot.command('check', (ctx) => {
+  const message = `
+🎉 <b>Welcome to Blink!</b> the future of crypto trading!🚀
+Here's why you made the right choice:
+
+<b>1. Revenue-share:</b> 10% of all our fees go to you, our
+community. This is dependent on your trading volume and points.
+
+<b>2. User centric Design:</b> Whether you're a beginner or a pro, our bot is tailored to fit all your trading needs.
+
+<b>3. Unmatched Speed, Fees & Security:</b> We optimise trading routes, while keeping your capital safety our top priority.
+`;
+
+  ctx.reply(message, {
+    parse_mode: 'HTML',
+    ...Markup.inlineKeyboard([
+      [Markup.button.callback('Create Wallet', 'option_1')],
+    ]),
+  });
+});
+
+bot.command('walletDetails', (ctx) => {
+  const message = `
+<b>Your wallet details:</b>
+
+💰Balance : 0 SOL
+
+To start trading send some SOL to your Mon3y address
+
+...address....
+
+Once done, tap refresh and your balance will appear here.
+
+<b>How to buy a token?</b>
+Simply enter the token symbol or contract address
+`;
+
+  ctx.reply(message, {
+    parse_mode: 'HTML',
+    ...Markup.inlineKeyboard([
+      [Markup.button.callback('Buy', 'option_1'),Markup.button.callback('Sell & Manage', 'option_1')],
+      [Markup.button.callback('Orders', 'option_1'),Markup.button.callback('🌟My points', 'option_1')],
+      [Markup.button.callback('Wallet', 'option_1'),Markup.button.callback('Settings', 'option_1')],
+      [Markup.button.callback('Help', 'option_1'),Markup.button.callback('Refer friends', 'option_1')],
+      [Markup.button.callback('Refresh', 'option_1')],
+    ]),
+  });
+});
 
 bot.command('trade', async (ctx) => {
   const [command, symbol] = ctx.message.text.split(' ');
